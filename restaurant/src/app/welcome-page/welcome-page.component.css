@@ -1,0 +1,41 @@
+.background-image {
+  background-image: url(../../assets/spaghetti-1932466_1280.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.heading-title-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 90%;
+}
+
+.heading-text {
+  color: azure;
+  font-size: 50px;
+}
+
+.nav-div {
+  height: 60px;
+  background-color: grey;
+}
+
+.nav-div-list {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: azure;
+  cursor: pointer;
+}

@@ -1,0 +1,126 @@
+.main-wraper {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.grid-wraper {
+  background-color: grey;
+  width: 33vh;
+  height: 100%;
+  margin-top: 60px;
+  margin-left: 20px;
+  margin-bottom: 60px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  padding: 0px;
+  color: aliceblue;
+  width: 100%;
+  text-align: center;
+}
+
+.random-meal-div {
+  background-color: gray;
+  width: 100%;
+  height: 80vh;
+  margin: 20px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.meal-id {
+  margin-right: 20px;
+  margin-left: 20px;
+  display: flex;
+  justify-content: start;
+}
+
+.meal-name {
+  color: antiquewhite;
+  text-align: center;
+  padding: 20px;
+  font-weight: 900;
+  font-size: 25px;
+}
+
+.meal-image {
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  padding: 5px;
+}
+
+.meal-ingredients {
+  background-color: rgb(142, 172, 172);
+  color: antiquewhite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.pag-div {
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-meal-div {
+  background-color: rgb(46, 23, 27);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-button-div {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.edit-form-div {
+  padding-bottom: 50px;
+}
+
+label {
+  text-align: center;
+  color: aliceblue;
+}
+
+.label-and-input-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.search-form-div {
+  /* justify-content: center; */
+  text-align: center;
+  padding: 10px;
+}
+
+.add-new-meal-div {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.test {
+  height: 300px;
+  width: 500px;
+  background-color: crimson;
+}

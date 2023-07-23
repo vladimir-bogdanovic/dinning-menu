@@ -1,0 +1,51 @@
+.sorting-div {
+  background-color: aquamarine;
+}
+
+.sorting-title {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.sorting-buttons-div {
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.button-category {
+  border-radius: 5px 0px 0px 5px;
+}
+
+.button-country {
+  border-radius: 0px 5px 5px 0px;
+}
+
+.selection-div-wraper {
+  display: flex;
+  justify-content: center;
+}
+
+.selction-div-choices {
+  background-color: grey;
+  width: 400px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+ul {
+  padding: 0px;
+}
+
+li {
+  padding: 20px;
+  color: aliceblue;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}

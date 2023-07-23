@@ -1,0 +1,29 @@
+<div class="sorting-div">
+  <h2 class="sorting-title">Choose meals by:</h2>
+  <div class="sorting-buttons-div">
+    <button (click)="sortingByCategories()" class="button button-category">
+      Categories
+    </button>
+    <button (click)="sortingByAreas()" class="button button-country">
+      Areas
+    </button>
+  </div>
+</div>
+<div *ngIf="showDiv" class="selection-div-wraper">
+  <div class="selction-div-choices">
+    <ul *ngFor="let category of categoriesList">
+      <li (click)="goToFoodCategory(category.strCategory)">
+        {{ category.strCategory }}
+      </li>
+    </ul>
+  </div>
+</div>
+<div *ngIf="!showDiv" class="selection-div-wraper">
+  <div class="selction-div-choices">
+    <ul *ngFor="let area of areasList">
+      <li>
+        {{ area.strArea }}
+      </li>
+    </ul>
+  </div>
+</div>
