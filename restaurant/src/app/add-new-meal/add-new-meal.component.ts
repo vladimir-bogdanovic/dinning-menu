@@ -1,15 +1,17 @@
-import { Component } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { Location } from "@angular/common";
-import { DataSharingService } from "../shared/data-sharing.service";
+import { Location } from '@angular/common';
+import { DataSharingService } from '../shared/data-sharing.service';
 
 @Component({
-  selector: "app-add-new-meal",
-  templateUrl: "./add-new-meal.component.html",
-  styleUrls: ["./add-new-meal.component.css"],
+  selector: 'app-add-new-meal',
+  templateUrl: './add-new-meal.component.html',
+  styleUrls: ['./add-new-meal.component.css'],
 })
 export class AddNewMealComponent {
+  mealToAdd: string = 'key';
+
   constructor(
     private location: Location,
     private dataSharingService: DataSharingService
@@ -31,10 +33,10 @@ export class AddNewMealComponent {
 
   onSubmit() {
     this.dataSharingService.sendData(this.addNewMealForm.value);
-    // console.log(this.dataSharingService.sendData(this.addNewMealForm));
-    //  console.log(this.addNewMealForm);
-    console.log(this.addNewMealForm.value);
     this.location.back();
-    // console.log(data);
+    localStorage.setItem(
+      this.mealToAdd,
+      JSON.stringify(this.addNewMealForm.value)
+    );
   }
 }
