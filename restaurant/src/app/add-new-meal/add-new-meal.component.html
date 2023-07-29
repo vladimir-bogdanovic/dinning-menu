@@ -1,26 +1,54 @@
-<form [formGroup]="addNewMealForm" (ngSubmit)="onSubmit()">
-  <h2 class="meal-name">Add new recipe</h2>
-  <div class="label-and-input-div">
-    <label for="name">meal name: </label>
-    <input type="text" formControlName="strMeal" />
-  </div>
-  <div>
-    <label for=""> Your image link</label>
-    <input type="text" formControlName="strMealThumb" />
-  </div>
-  <div class="label-and-input-div">
-    <label for="text">add yout ingredients: </label>
-    <input type="text" formControlName="strIngredient1" />
-    <input type="text" formControlName="strIngredient2" />
-    <input type="text" formControlName="strIngredient3" />
-    <input type="text" formControlName="strIngredient4" />
-    <input type="text" formControlName="strIngredient5" />
-    <input type="text" formControlName="strIngredient6" />
-    <input type="text" formControlName="strIngredient7" />
-    <input type="text" formControlName="strIngredient8" />
-    <input type="text" formControlName="strIngredient9" />
-  </div>
-  <div class="label-and-input-div">
-    <button class="button" type="submit">Save</button>
-  </div>
-</form>
+<h2 class="add-meal-title">Add new recipe</h2>
+<div class="form-wraper">
+  <form [formGroup]="addNewMealForm" (ngSubmit)="onSubmit()">
+    <div class="label-and-input-div">
+      <label for="name">Meal name: </label>
+      <input type="text" formControlName="strMeal" name="strMeal" />
+      <span
+        class="invalid-input-warning"
+        *ngIf="
+          !addNewMealForm.get('strMeal').valid &&
+          addNewMealForm.get('strMeal').touched
+        "
+        >Please enter a valid name!</span
+      >
+    </div>
+    <div class="label-and-input-div">
+      <label for="">Your image link:</label>
+      <input type="text" formControlName="strMealThumb" />
+    </div>
+    <div class="label-and-input-div">
+      <label for="text">Add yout ingredients: </label>
+      <input
+        type="text"
+        formControlName="strIngredient1"
+        ing1="strIngredient1"
+      />
+      <input type="text" formControlName="strIngredient2" />
+      <input type="text" formControlName="strIngredient3" />
+      <input type="text" formControlName="strIngredient4" />
+      <input type="text" formControlName="strIngredient5" />
+      <input type="text" formControlName="strIngredient6" />
+      <input type="text" formControlName="strIngredient7" />
+      <input type="text" formControlName="strIngredient8" />
+      <input type="text" formControlName="strIngredient9" />
+      <span
+        class="invalid-input-warning"
+        *ngIf="
+          !addNewMealForm.get('strIngredient1').valid &&
+          addNewMealForm.get('strIngredient1').touched
+        "
+        >Enter at least 1 ingredient! <br />
+        (must <b></b>e in first ingredient input)</span
+      >
+    </div>
+
+    <div class="label-and-input-div">
+      <hr />
+      <button class="button" type="submit" [disabled]="!addNewMealForm.valid">
+        <span *ngIf="addNewMealForm.valid">Sumbit</span>
+        <span *ngIf="!addNewMealForm.valid">Enter mandatory data!</span>
+      </button>
+    </div>
+  </form>
+</div>
