@@ -146,7 +146,6 @@ export class CategoryMealsComponent implements OnInit {
   getMealDetails(id: string) {
     this.mealSelected = true;
     if (id === undefined) {
-      console.log('yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', id);
       this.selectedMealDetail = this.addedItemInfo;
     } else {
       this.callingService

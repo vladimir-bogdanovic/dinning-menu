@@ -10,6 +10,10 @@ ul {
   list-style: none;
 }
 
+li {
+  cursor: pointer;
+}
+
 li:hover {
   background-color: rgb(1, 19, 19);
 }
