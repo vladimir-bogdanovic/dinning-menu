@@ -1,28 +1,36 @@
-<h2>testiranje push & pull/// main</h2>
+<h2 class="add-meal-title">Add new recipe</h2>
 
-<form [formGroup]="addNewMealForm" (ngSubmit)="onSubmit()">
-  <h2 class="meal-name">Add new recipe</h2>
-  <div class="label-and-input-div">
-    <label for="name">meal name: </label>
-    <input type="text" formControlName="strMeal" />
-  </div>
-  <div>
-    <label for=""> Your image link</label>
-    <input type="text" formControlName="strMealThumb" />
-  </div>
-  <div class="label-and-input-div">
-    <label for="text">add yout ingredients: </label>
-    <input type="text" formControlName="strIngredient1" />
-    <input type="text" formControlName="strIngredient2" />
-    <input type="text" formControlName="strIngredient3" />
-    <input type="text" formControlName="strIngredient4" />
-    <input type="text" formControlName="strIngredient5" />
-    <input type="text" formControlName="strIngredient6" />
-    <input type="text" formControlName="strIngredient7" />
-    <input type="text" formControlName="strIngredient8" />
-    <input type="text" formControlName="strIngredient9" />
-  </div>
-  <div class="label-and-input-div">
-    <button class="button" type="submit">Save</button>
-  </div>
-</form>
+<div class="form-wraper">
+  <form [formGroup]="addNewMealForm" (ngSubmit)="onSubmit()">
+    <div
+      class="add-meal__input-container"
+      *ngFor="let controlName of addNewMealForm.controls | keyvalue"
+    >
+      <label>{{ controlName.key }}: </label>
+
+      <input
+        type="text"
+        [formControlName]="controlName.key"
+        id="{{ controlName.key }}"
+        [ngClass]="{ error: isInvalid(controlName.key) }"
+      />
+      <div *ngIf="isInvalid(controlName.key)">
+        <p class="error-message">All fields must be filled!</p>
+      </div>
+    </div>
+
+    <div class="add-meal__buttons-container">
+      <hr />
+      <button class="button" type="button" (click)="removeInputField()">
+        Remove Ingredient field
+      </button>
+      <button class="button" type="button" (click)="addInputField()">
+        Add Ingredient field
+      </button>
+      <button class="button" type="submit" [disabled]="!addNewMealForm.valid">
+        <span *ngIf="addNewMealForm.valid">Sumbit</span>
+        <span *ngIf="!addNewMealForm.valid">Enter mandatory data!</span>
+      </button>
+    </div>
+  </form>
+</div>

@@ -10,8 +10,12 @@ ul {
   list-style: none;
 }
 
+li {
+  cursor: pointer;
+}
+
 li:hover {
-  background-color: rgb(1, 19, 19);
+  background-color: var(--hover-color);
 }
 
 .button {
@@ -19,7 +23,7 @@ li:hover {
   background-image: linear-gradient(-180deg, #00d775, #00bd68);
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
-  color: #ffffff;
+  color: var(--text-color);
   cursor: pointer;
   display: inline-block;
   font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial,
@@ -45,4 +49,13 @@ li:hover {
 
 .button:hover {
   background: #00bd68;
+}
+
+:root {
+  --nav-color: #5e6572;
+  --div-color: #a9b4c2;
+  --divider-div-color: #fc814a;
+  --hover-color: #1c2321;
+  --text-color: #eef1ef;
+  --desabled-color: #303133;
 }

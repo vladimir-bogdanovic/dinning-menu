@@ -1,9 +1,8 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { NewMealInterface } from "../types/new-meal";
-import { SingleMealDetailsInterface } from "../types/meal-details";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { SingleMealDetailsInterface } from '../types/meal-details';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class DataSharingService {
   private dataSource: BehaviorSubject<SingleMealDetailsInterface> =
     new BehaviorSubject<SingleMealDetailsInterface>(null);

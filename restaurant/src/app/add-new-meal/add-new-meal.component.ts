@@ -1,40 +1,69 @@
-import { Component } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormBuilder,
+} from '@angular/forms';
 
-import { Location } from "@angular/common";
-import { DataSharingService } from "../shared/data-sharing.service";
+import { Location } from '@angular/common';
+import { DataSharingService } from '../shared/data-sharing.service';
 
 @Component({
-  selector: "app-add-new-meal",
-  templateUrl: "./add-new-meal.component.html",
-  styleUrls: ["./add-new-meal.component.css"],
+  selector: 'app-add-new-meal',
+  templateUrl: './add-new-meal.component.html',
+  styleUrls: ['./add-new-meal.component.css'],
 })
-export class AddNewMealComponent {
+export class AddNewMealComponent implements OnInit {
+  mealToAdd: string = 'key';
+  addNewMealForm: FormGroup;
+
   constructor(
     private location: Location,
-    private dataSharingService: DataSharingService
+    private dataSharingService: DataSharingService,
+    private formBuilder: FormBuilder
   ) {}
 
-  addNewMealForm = new FormGroup({
-    strMeal: new FormControl(),
-    strMealThumb: new FormControl(),
-    strIngredient1: new FormControl(),
-    strIngredient2: new FormControl(),
-    strIngredient3: new FormControl(),
-    strIngredient4: new FormControl(),
-    strIngredient5: new FormControl(),
-    strIngredient6: new FormControl(),
-    strIngredient7: new FormControl(),
-    strIngredient8: new FormControl(),
-    strIngredient9: new FormControl(),
-  });
+  ngOnInit(): void {
+    this.addNewMealForm = new FormGroup({
+      strIngredient1: new FormControl(null, Validators.required),
+      strMealThumb: new FormControl(null, Validators.required),
+      strMeal: new FormControl(null, Validators.required),
+    });
+  }
+
+  addInputField() {
+    const fieldNumber = Object.keys(this.addNewMealForm.controls).length - 1;
+    const newFieldName = `strIngredient${fieldNumber}`;
+    this.addNewMealForm.addControl(
+      newFieldName,
+      this.formBuilder.control(null, Validators.required)
+    );
+  }
+
+  removeInputField() {
+    //   const fieldName = Object.keys(this.addNewMealForm.controls).length;
+    console.log(Object.keys(this.addNewMealForm.controls).splice(1));
+    const i = Object.keys(this.addNewMealForm.controls).pop();
+    const length = Object.keys(this.addNewMealForm.controls).length - 1;
+    console.log(length);
+    if (length >= 3) {
+      this.addNewMealForm.removeControl(i);
+    }
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.addNewMealForm.get(controlName);
+    return control.invalid && control.touched;
+  }
 
   onSubmit() {
+    console.log(this.addNewMealForm);
     this.dataSharingService.sendData(this.addNewMealForm.value);
-    // console.log(this.dataSharingService.sendData(this.addNewMealForm));
-    //  console.log(this.addNewMealForm);
-    console.log(this.addNewMealForm.value);
     this.location.back();
-    // console.log(data);
+    localStorage.setItem(
+      this.mealToAdd,
+      JSON.stringify(this.addNewMealForm.value)
+    );
   }
 }

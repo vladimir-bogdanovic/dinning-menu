@@ -1,25 +1,25 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { CallingService } from "src/app/services/calling.service";
-import { DataSharingService } from "src/app/shared/data-sharing.service";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { CallingService } from 'src/app/services/calling.service';
+import { DataSharingService } from 'src/app/shared/data-sharing.service';
 import {
   CategoryMealsInterface,
   SingleCategoryMealInterface,
-} from "src/app/types/category-meals";
+} from 'src/app/types/category-meals';
 import {
   SingleMealDetailsInterface,
   mealsDetailsInterface,
-} from "src/app/types/meal-details";
+} from 'src/app/types/meal-details';
 import {
   RandomMealInterface,
   SingleRandomMealInterface,
-} from "src/app/types/random-meal";
+} from 'src/app/types/random-meal';
 
 @Component({
-  selector: "app-category-meals",
-  templateUrl: "./category-meals.component.html",
-  styleUrls: ["./category-meals.component.css"],
+  selector: 'app-category-meals',
+  templateUrl: './category-meals.component.html',
+  styleUrls: ['./category-meals.component.css'],
 })
 export class CategoryMealsComponent implements OnInit {
   param!: string;
@@ -32,7 +32,7 @@ export class CategoryMealsComponent implements OnInit {
   itemsPerPage = 10;
 
   isSearching = false;
-  searchValue = "";
+  searchValue = '';
 
   //random meal values
   randomMeal!: SingleRandomMealInterface;
@@ -55,7 +55,7 @@ export class CategoryMealsComponent implements OnInit {
   editMealForm!: FormGroup;
 
   newMealInfo: SingleMealDetailsInterface;
-  // newMealAdded: boolean = false;
+  addedItemInfo!: SingleMealDetailsInterface;
 
   constructor(
     private callingService: CallingService,
@@ -69,7 +69,7 @@ export class CategoryMealsComponent implements OnInit {
     search: new FormControl(),
   });
   get getForm() {
-    return this.searchForm.get("search");
+    return this.searchForm.get('search');
   }
   // params
   getParams() {
@@ -82,7 +82,7 @@ export class CategoryMealsComponent implements OnInit {
   searchValueChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.searchValue = value;
-    if (this.searchValue != "") {
+    if (this.searchValue != '') {
       this.isSearching = true;
     } else if (this.searchValue.length < 1) {
       this.isSearching = false;
@@ -100,9 +100,7 @@ export class CategoryMealsComponent implements OnInit {
           }
         );
         // getting all meals
-        //  this.categoryMeals = resData.meals;
         this.categoryMeals = [...resData.meals, this.newMealInfo];
-        //  console.log(this.categoryMeals);
         // for pagination
         this.numberOfMeals = this.categoryMeals.length;
         // search feature
@@ -124,7 +122,7 @@ export class CategoryMealsComponent implements OnInit {
     this.callingService
       .getRandomMeal()
       .subscribe((resData: RandomMealInterface) => {
-        this.randomMeal = resData.meals[0];
+        // console.log(resData);
         this.randomMealName = resData.meals[0].strMeal;
         this.randomMealThumb = resData.meals[0].strMealThumb;
         this.randomMealCategory = resData.meals[0].strCategory;
@@ -139,23 +137,29 @@ export class CategoryMealsComponent implements OnInit {
         this.ingredient9 = resData.meals[0].strIngredient9;
       });
     ////////////////////////////////////////////
+    // geting added item from local storage
+    this.addedItemInfo = JSON.parse(localStorage.getItem('key'));
   }
 
   // get details of selected meal
   getMealDetails(id: string) {
+    this.isEditing = false;
+    this.editButtonClicked = false;
     this.mealSelected = true;
-    this.callingService
-      .getMealDetails(id)
-      .subscribe((resData: mealsDetailsInterface) => {
-        this.selectedMealDetail = resData.meals[0];
-        console.log(resData.meals);
-        console.log(resData);
-      });
+    if (!id) {
+      this.selectedMealDetail = this.addedItemInfo;
+    } else {
+      this.callingService
+        .getMealDetails(id)
+        .subscribe((resData: mealsDetailsInterface) => {
+          this.selectedMealDetail = resData.meals[0];
+        });
+    }
   }
 
   // go to add-new-meal page
   goToNewMealPage() {
-    this.router.navigate(["menu/" + this.param + "/" + "new-meal"]);
+    this.router.navigate(['menu/' + this.param + '/new-meal']);
   }
 
   // EDITING MEAL START
