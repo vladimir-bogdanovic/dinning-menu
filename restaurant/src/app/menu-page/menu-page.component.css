@@ -1,5 +1,5 @@
 .sorting-div {
-  background-color: aquamarine;
+  background-color: var(--nav-color);
 }
 
 .sorting-title {
@@ -7,6 +7,7 @@
   justify-content: center;
   padding-top: 20px;
   padding-bottom: 20px;
+  color: var(--text-color);
 }
 
 .sorting-buttons-div {
@@ -31,7 +32,7 @@
 }
 
 .selction-div-choices {
-  background-color: grey;
+  background-color: var(--div-color);
   width: 400px;
   margin-top: 60px;
   margin-bottom: 60px;
@@ -43,7 +44,7 @@ ul {
 
 li {
   padding: 20px;
-  color: aliceblue;
+  color: var(--text-color);
   width: 100%;
   display: flex;
   justify-content: center;

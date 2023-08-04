@@ -16,13 +16,13 @@
 }
 
 .heading-text {
-  color: azure;
+  color: var(--text-color);
   font-size: 50px;
 }
 
 .nav-div {
   height: 60px;
-  background-color: grey;
+  background-color: var(--nav-color);
 }
 
 .nav-div-list {
@@ -36,6 +36,6 @@ li {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  color: azure;
+  color: var(--text-color);
   cursor: pointer;
 }

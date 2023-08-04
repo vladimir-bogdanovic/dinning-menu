@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CallingService } from 'src/app/services/calling.service';
 import { DataSharingService } from 'src/app/shared/data-sharing.service';
@@ -11,7 +11,6 @@ import {
   SingleMealDetailsInterface,
   mealsDetailsInterface,
 } from 'src/app/types/meal-details';
-import { NewMealInterface } from 'src/app/types/new-meal';
 import {
   RandomMealInterface,
   SingleRandomMealInterface,
@@ -56,7 +55,7 @@ export class CategoryMealsComponent implements OnInit {
   editMealForm!: FormGroup;
 
   newMealInfo: SingleMealDetailsInterface;
-  addedItemInfo!: any;
+  addedItemInfo!: SingleMealDetailsInterface;
 
   constructor(
     private callingService: CallingService,
@@ -123,7 +122,7 @@ export class CategoryMealsComponent implements OnInit {
     this.callingService
       .getRandomMeal()
       .subscribe((resData: RandomMealInterface) => {
-        this.randomMeal = resData.meals[0];
+        // console.log(resData);
         this.randomMealName = resData.meals[0].strMeal;
         this.randomMealThumb = resData.meals[0].strMealThumb;
         this.randomMealCategory = resData.meals[0].strCategory;
@@ -144,8 +143,10 @@ export class CategoryMealsComponent implements OnInit {
 
   // get details of selected meal
   getMealDetails(id: string) {
+    this.isEditing = false;
+    this.editButtonClicked = false;
     this.mealSelected = true;
-    if (id === undefined) {
+    if (!id) {
       this.selectedMealDetail = this.addedItemInfo;
     } else {
       this.callingService
@@ -158,7 +159,7 @@ export class CategoryMealsComponent implements OnInit {
 
   // go to add-new-meal page
   goToNewMealPage() {
-    this.router.navigate(['menu/' + this.param + '/' + 'new-meal']);
+    this.router.navigate(['menu/' + this.param + '/new-meal']);
   }
 
   // EDITING MEAL START
