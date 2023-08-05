@@ -166,6 +166,7 @@ export class CategoryMealsComponent implements OnInit {
   editMeal(meal: SingleMealDetailsInterface) {
     this.isEditing = true;
     this.editButtonClicked = true;
+
     this.editMealForm = new FormGroup({
       strMeal: new FormControl(meal.strMeal),
       strIngredient1: new FormControl(meal.strIngredient1),

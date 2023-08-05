@@ -12,4 +12,8 @@ export class WelcomePageComponent {
   toMenu() {
     this.router.navigate(['menu']);
   }
+
+  goToAboutPage() {
+    this.router.navigate(['about']);
+  }
 }
