@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-not-found',
@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./not-found.component.css'],
 })
 export class NotFoundComponent {
-  constructor(private router: Router) {}
+  constructor(private navService: NavigationService) {}
 
   goToWelcomePage() {
-    this.router.navigate(['welcome']);
+    this.navService.navigation('home');
   }
 }

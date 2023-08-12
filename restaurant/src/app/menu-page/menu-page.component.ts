@@ -1,23 +1,26 @@
-import { Component, OnInit } from "@angular/core";
-import { CallingService } from "../services/calling.service";
+import { Component, OnInit } from '@angular/core';
+import { CallingService } from '../services/calling.service';
 import {
   CategoriesInterface,
   SingleCategoryInterface,
-} from "../types/categories-list";
-import { AreasInterface, SingleAreaInterface } from "../types/area-list";
-import { Router } from "@angular/router";
+} from '../types/categories-list';
+import { AreasInterface, SingleAreaInterface } from '../types/area-list';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
-  selector: "app-menu-page",
-  templateUrl: "./menu-page.component.html",
-  styleUrls: ["./menu-page.component.css"],
+  selector: 'app-menu-page',
+  templateUrl: './menu-page.component.html',
+  styleUrls: ['./menu-page.component.css'],
 })
 export class MenuPageComponent implements OnInit {
   categoriesList!: SingleCategoryInterface[];
   areasList!: SingleAreaInterface[];
   showDiv: boolean = true;
 
-  constructor(private callingService: CallingService, private router: Router) {}
+  constructor(
+    private callingService: CallingService,
+    private navService: NavigationService
+  ) {}
 
   ngOnInit(): void {
     this.callingService
@@ -44,6 +47,7 @@ export class MenuPageComponent implements OnInit {
   }
 
   goToFoodCategory(food: string) {
-    this.router.navigate(["/menu" + "/" + food]);
+    // this.router.navigate(['/menu' + '/' + food]);
+    this.navService.navigation('menu/' + food);
   }
 }

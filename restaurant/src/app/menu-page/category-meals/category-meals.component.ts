@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
 import { CallingService } from 'src/app/services/calling.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 import { DataSharingService } from 'src/app/shared/data-sharing.service';
 import {
   CategoryMealsInterface,
@@ -36,32 +37,24 @@ export class CategoryMealsComponent implements OnInit {
 
   //random meal values
   randomMeal!: SingleRandomMealInterface;
-  randomMealName!: string;
-  randomMealThumb!: string;
-  randomMealCategory!: string;
-  ingredient1!: string;
-  ingredient2!: string;
-  ingredient3!: string;
-  ingredient4!: string;
-  ingredient5!: string;
-  ingredient6!: string;
-  ingredient7!: string;
-  ingredient8!: string;
-  ingredient9!: string;
   ////////////////////////////////////
 
   isEditing: boolean = false;
   editButtonClicked: boolean = false;
   editMealForm!: FormGroup;
 
-  newMealInfo: SingleMealDetailsInterface;
+  newMealInfo: SingleMealDetailsInterface | null;
   addedItemInfo!: SingleMealDetailsInterface;
+
+  sastojci: (string | null)[] = [];
+  sastojciRandomJela: (string | null)[] = [];
 
   constructor(
     private callingService: CallingService,
     private route: ActivatedRoute,
-    private router: Router,
-    private dataSharingService: DataSharingService
+    private dataSharingService: DataSharingService,
+    private navService: NavigationService,
+    private formBuilder: FormBuilder
   ) {}
 
   // search form methods
@@ -91,6 +84,7 @@ export class CategoryMealsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getParams();
+
     this.callingService
       .getCategoryMeals(this.param)
       .subscribe((resData: CategoryMealsInterface) => {
@@ -122,19 +116,12 @@ export class CategoryMealsComponent implements OnInit {
     this.callingService
       .getRandomMeal()
       .subscribe((resData: RandomMealInterface) => {
-        // console.log(resData);
-        this.randomMealName = resData.meals[0].strMeal;
-        this.randomMealThumb = resData.meals[0].strMealThumb;
-        this.randomMealCategory = resData.meals[0].strCategory;
-        this.ingredient1 = resData.meals[0].strIngredient1;
-        this.ingredient2 = resData.meals[0].strIngredient2;
-        this.ingredient3 = resData.meals[0].strIngredient3;
-        this.ingredient4 = resData.meals[0].strIngredient4;
-        this.ingredient5 = resData.meals[0].strIngredient5;
-        this.ingredient6 = resData.meals[0].strIngredient6;
-        this.ingredient7 = resData.meals[0].strIngredient7;
-        this.ingredient8 = resData.meals[0].strIngredient8;
-        this.ingredient9 = resData.meals[0].strIngredient9;
+        this.randomMeal = resData.meals[0];
+        Object.entries(this.randomMeal).map((data) => {
+          if (data[0].includes('strIngredient') && data[1] !== '') {
+            this.sastojciRandomJela.push(data[1]);
+          }
+        });
       });
     ////////////////////////////////////////////
     // geting added item from local storage
@@ -148,18 +135,32 @@ export class CategoryMealsComponent implements OnInit {
     this.mealSelected = true;
     if (!id) {
       this.selectedMealDetail = this.addedItemInfo;
+      this.sastojci.length = 0;
+      console.log(this.selectedMealDetail);
+      console.log(this.addedItemInfo);
+      Object.entries(this.selectedMealDetail).map((data: string[]) => {
+        if (data[0].includes('strIngredient') && data[1] !== '') {
+          this.sastojci.push(data[1]);
+        }
+      });
     } else {
       this.callingService
         .getMealDetails(id)
         .subscribe((resData: mealsDetailsInterface) => {
           this.selectedMealDetail = resData.meals[0];
+          this.sastojci.length = 0;
+          Object.entries(this.selectedMealDetail).map((data: string[]) => {
+            if (data[0].includes('strIngredient') && data[1] !== '') {
+              this.sastojci.push(data[1]);
+            }
+          });
         });
     }
   }
 
   // go to add-new-meal page
   goToNewMealPage() {
-    this.router.navigate(['menu/' + this.param + '/new-meal']);
+    this.navService.navigation('menu/' + this.param + '/new-meal');
   }
 
   // EDITING MEAL START
@@ -167,18 +168,45 @@ export class CategoryMealsComponent implements OnInit {
     this.isEditing = true;
     this.editButtonClicked = true;
 
-    this.editMealForm = new FormGroup({
+    // this.editMealForm = new FormGroup({
+    //   strMeal: new FormControl(meal.strMeal),
+    //   strIngredient1: new FormControl(meal.strIngredient1),
+    //   strIngredient2: new FormControl(meal.strIngredient2),
+    //   strIngredient3: new FormControl(meal.strIngredient3),
+    //   strIngredient4: new FormControl(meal.strIngredient4),
+    //   strIngredient5: new FormControl(meal.strIngredient5),
+    //   strIngredient6: new FormControl(meal.strIngredient6),
+    //   strIngredient7: new FormControl(meal.strIngredient7),
+    //   strIngredient8: new FormControl(meal.strIngredient8),
+    //   strIngredient9: new FormControl(meal.strIngredient9),
+    // });
+
+    this.editMealForm = this.formBuilder.group({
       strMeal: new FormControl(meal.strMeal),
-      strIngredient1: new FormControl(meal.strIngredient1),
-      strIngredient2: new FormControl(meal.strIngredient2),
-      strIngredient3: new FormControl(meal.strIngredient3),
-      strIngredient4: new FormControl(meal.strIngredient4),
-      strIngredient5: new FormControl(meal.strIngredient5),
-      strIngredient6: new FormControl(meal.strIngredient6),
-      strIngredient7: new FormControl(meal.strIngredient7),
-      strIngredient8: new FormControl(meal.strIngredient8),
-      strIngredient9: new FormControl(meal.strIngredient9),
+      // strMeal: [null],
+      strIngredient1: [null],
+      strIngredient2: [null],
+      strIngredient3: [null],
+      strIngredient4: [null],
+      strIngredient5: [null],
+      strIngredient6: [null],
+      strIngredient7: [null],
+      strIngredient8: [null],
+      strIngredient9: [null],
+      strIngredient10: [null],
+      strIngredient11: [null],
+      strIngredient12: [null],
+      strIngredient13: [null],
+      strIngredient14: [null],
+      strIngredient15: [null],
+      strIngredient16: [null],
+      strIngredient17: [null],
+      strIngredient18: [null],
+      strIngredient19: [null],
+      strIngredient20: [null],
     });
+
+    this.editMealForm.patchValue(this.selectedMealDetail);
   }
   saveMealChanges() {
     this.selectedMealDetail.strMeal = this.editMealForm.value.strMeal;

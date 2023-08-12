@@ -13,7 +13,7 @@ const routes: Routes = [
     component: WelcomePageComponent,
   },
   {
-    path: 'welcome',
+    path: 'home',
     component: WelcomePageComponent,
   },
   {
@@ -33,10 +33,10 @@ const routes: Routes = [
     component: AboutComponent,
   },
   {
-    path: 'not-found',
+    path: '*',
     component: NotFoundComponent,
   },
-  { path: '**', redirectTo: '/not-found' },
+  { path: '**', redirectTo: '*' },
 ];
 
 @NgModule({

@@ -8,7 +8,7 @@ export class DataSharingService {
     new BehaviorSubject<SingleMealDetailsInterface>(null);
   data: Observable<SingleMealDetailsInterface> = this.dataSource.asObservable();
 
-  sendData(data: any) {
+  sendData(data: SingleMealDetailsInterface) {
     this.dataSource.next(data);
   }
 }
