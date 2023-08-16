@@ -57,7 +57,7 @@
     </div>
     <div class="meal-ingredients">
       <ul>
-        <li *ngFor="let randomSastojci of sastojciRandomJela">
+        <li *ngFor="let randomSastojci of randomMealIngredients">
           {{ randomSastojci }}
         </li>
       </ul>
@@ -74,7 +74,7 @@
     </div>
     <div class="meal-ingredients">
       <ul>
-        <li *ngFor="let sastojak of sastojci">
+        <li *ngFor="let sastojak of ingredients">
           {{ sastojak }}
         </li>
       </ul>
@@ -91,35 +91,19 @@
         </button>
       </div>
       <div *ngIf="isEditing" class="edit-form-div">
-        <!-- EDIT MEAL FORM START -->
-        <form [formGroup]="editMealForm">
-          <h2 class="meal-name">Edit selected recipe</h2>
-          <div class="label-and-input-div">
-            <label for="name">meal name: </label>
-            <input type="text" formControlName="strMeal" />
+        <!-- EDIT MEAL FORM START  -->
+
+        <form [formGroup]="dynamicForm">
+          <label for="text">add yout ingredients: </label>
+          <div
+            class="ingredients-container"
+            *ngFor="let test of dynamicForm.controls | keyvalue; let i = index"
+          >
+            <input type="text" [formControlName]="test.key" />
+            <button (click)="editSpecificIngredient(i)">edit</button>
+            <button>delete</button>
           </div>
-          <div class="label-and-input-div">
-            <label for="text">add yout ingredients: </label>
-            <input type="text" formControlName="strIngredient1" />
-            <input type="text" formControlName="strIngredient2" />
-            <input type="text" formControlName="strIngredient3" />
-            <input type="text" formControlName="strIngredient4" />
-            <input type="text" formControlName="strIngredient5" />
-            <input type="text" formControlName="strIngredient6" />
-            <input type="text" formControlName="strIngredient7" />
-            <input type="text" formControlName="strIngredient8" />
-            <input
-              *ngIf="editMealForm.value.strIngredient9"
-              type="text"
-              formControlName="strIngredient9"
-            />
-            <input
-              type="text"
-              formControlName="strIngredient14"
-              placeholder="14"
-            />
-          </div>
-          <div class="label-and-input-div">
+          <div class="ingredients-container">
             <button class="button" type="button" (click)="saveMealChanges()">
               Save
             </button>
@@ -128,9 +112,6 @@
             </button>
           </div>
         </form>
-        <!-- <div>
-          <input *ngFor="let test of sastojci" placeholder="{{ test }}" />
-        </div> -->
         <!-- EDIT MEAL FORM END -->
       </div>
     </div>

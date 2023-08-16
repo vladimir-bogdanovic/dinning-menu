@@ -100,7 +100,7 @@ label {
   color: var(--text-color);
 }
 
-.label-and-input-div {
+.ingredients-container {
   display: flex;
   justify-content: center;
   align-items: center;
