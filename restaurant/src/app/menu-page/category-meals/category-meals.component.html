@@ -27,9 +27,11 @@
         "
       >
         <li (click)="getMealDetails(categoryMeal.idMeal)">
-          <div class="meal-list-name">
-            <span> {{ categoryMeal.strMeal }}</span>
-          </div>
+          <ng-container *ngIf="categoryMeal">
+            <div class="meal-list-name">
+              <span> {{ categoryMeal.strMeal }}</span>
+            </div>
+          </ng-container>
         </li>
       </ul>
       <!-- PAGINATION START -->
@@ -49,12 +51,14 @@
   <!-- MEAL DETAILS START -->
   <!-- RANDOM MEALSTART -->
   <div *ngIf="!mealSelected" class="random-meal-div">
-    <div class="meal-name">
-      <span>{{ randomMeal.strMeal }} - {{ randomMeal.strCategory }}</span>
-    </div>
-    <div class="meal-image">
-      <img src="{{ randomMeal.strMealThumb }}" alt="" />
-    </div>
+    <ng-container *ngIf="randomMeal">
+      <div class="meal-name">
+        <span>{{ randomMeal.strMeal }} - {{ randomMeal.strCategory }}</span>
+      </div>
+      <div class="meal-image">
+        <img src="{{ randomMeal.strMealThumb }}" alt="" />
+      </div>
+    </ng-container>
     <div class="meal-ingredients">
       <ul>
         <li *ngFor="let randomSastojci of randomMealIngredients">
@@ -66,12 +70,14 @@
   <!-- RANDOM MEAL END -->
   <!-- SELECTED MEAL START -->
   <div *ngIf="mealSelected" class="random-meal-div">
-    <div class="meal-name">
-      <span>{{ selectedMealDetail.strMeal }}</span>
-    </div>
-    <div class="meal-image">
-      <img src="{{ selectedMealDetail.strMealThumb }}" alt="" />
-    </div>
+    <ng-container *ngIf="selectedMealDetail">
+      <div class="meal-name">
+        <span>{{ selectedMealDetail.strMeal }}</span>
+      </div>
+      <div class="meal-image">
+        <img src="{{ selectedMealDetail.strMealThumb }}" alt="" />
+      </div>
+    </ng-container>
     <div class="meal-ingredients">
       <ul>
         <li *ngFor="let sastojak of ingredients">
@@ -99,8 +105,15 @@
             class="ingredients-container"
             *ngFor="let test of dynamicForm.controls | keyvalue; let i = index"
           >
-            <input type="text" [formControlName]="test.key" />
-            <button (click)="editSpecificIngredient(i)">edit</button>
+            <label for="{{ test.key }}"> {{ test.key }}</label>
+            <input type="text" [formControlName]="test.key" value= />
+            <button
+              (click)="
+                editSpecificIngredient(test.key, selectedMealDetail.idMeal, i)
+              "
+            >
+              edit
+            </button>
             <button>delete</button>
           </div>
           <div class="ingredients-container">

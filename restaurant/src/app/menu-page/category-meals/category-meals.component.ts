@@ -85,10 +85,19 @@ export class CategoryMealsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getParams();
-
+    const param = this.route.snapshot.params['food'];
     this.callingService
-      .getCategoryMeals(this.param)
+      .getRandomMeal()
+      .subscribe((resData: RandomMealInterface) => {
+        this.randomMeal = resData.meals[0];
+        Object.entries(this.randomMeal).map((data) => {
+          if (data[0].includes('strIngredient') && data[1] !== '') {
+            this.randomMealIngredients.push(data[1]);
+          }
+        });
+      });
+    this.callingService
+      .getCategoryMeals(param)
       .subscribe((resData: CategoryMealsInterface) => {
         this.dataSharingService.data.subscribe(
           (resData: SingleMealDetailsInterface) => {
@@ -102,7 +111,7 @@ export class CategoryMealsComponent implements OnInit {
         // search feature
         this.getForm.valueChanges.subscribe((input: string) => {
           this.callingService
-            .getCategoryMeals(this.param)
+            .getCategoryMeals(param)
             .subscribe((resData: CategoryMealsInterface) => {
               this.categoryMeals = resData.meals;
               this.categoryMeals = this.categoryMeals.filter(
@@ -115,16 +124,7 @@ export class CategoryMealsComponent implements OnInit {
         });
       });
     // getting all necessaery random meal values
-    this.callingService
-      .getRandomMeal()
-      .subscribe((resData: RandomMealInterface) => {
-        this.randomMeal = resData.meals[0];
-        Object.entries(this.randomMeal).map((data) => {
-          if (data[0].includes('strIngredient') && data[1] !== '') {
-            this.randomMealIngredients.push(data[1]);
-          }
-        });
-      });
+
     ////////////////////////////////////////////
     // geting added item from local storage
     this.addedItemInfo = JSON.parse(localStorage.getItem('key'));
@@ -189,13 +189,17 @@ export class CategoryMealsComponent implements OnInit {
     this.editButtonClicked = false;
   }
 
-  editSpecificIngredient(i) {
-    Object.entries(this.dynamicForm.value).map((data) => {
-      console.log(typeof +data[0].slice(13));
-      if (+data[0].slice(13) === i + 1) {
-        console.log(data[1]);
-      }
-    });
+  editSpecificIngredient(test: string, id: string, sastojakId: number) {
+    this.ingredients[sastojakId] = this.dynamicForm.controls[test].value;
+
+    console.log(this.dynamicForm.controls[test].value, id);
+    console.log(test);
+    // Object.entries(this.dynamicForm.value).map((data) => {
+    //   console.log(data);
+    // });
+    // if (+data[0].slice(13) === i + 1) {
+    //   console.log(data[1]);
+    // }
   }
   // EDITING MEAL END
 }
