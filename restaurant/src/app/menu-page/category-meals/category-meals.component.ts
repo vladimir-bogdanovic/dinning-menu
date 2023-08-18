@@ -48,8 +48,9 @@ export class CategoryMealsComponent implements OnInit {
 
   ingredients: (string | null)[] = [];
   randomMealIngredients: (string | null)[] = [];
-  dynamicForm!: FormGroup;
+  dynamicForm: FormGroup = this.formBuilder.group({});
   ingredientValue: any;
+  formKeys: string[] = [];
 
   constructor(
     private callingService: CallingService,
@@ -85,13 +86,15 @@ export class CategoryMealsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //  console.log(this.dynamicForm);
     const param = this.route.snapshot.params['food'];
     this.callingService
       .getRandomMeal()
       .subscribe((resData: RandomMealInterface) => {
         this.randomMeal = resData.meals[0];
         Object.entries(this.randomMeal).map((data) => {
-          if (data[0].includes('strIngredient') && data[1] !== '') {
+          if (data[0].includes('strIngredient') && data[1]) {
+            //   console.log(data);
             this.randomMealIngredients.push(data[1]);
           }
         });
@@ -132,25 +135,29 @@ export class CategoryMealsComponent implements OnInit {
 
   // get details of selected meal
   getMealDetails(id: string) {
-    this.isEditing = false;
     this.editButtonClicked = false;
     this.mealSelected = true;
+    this.isEditing = false;
+
     if (!id) {
       this.selectedMealDetail = this.addedItemInfo;
       this.ingredients.length = 0;
+
       Object.entries(this.selectedMealDetail).map((data: string[]) => {
-        if (data[0].includes('strIngredient') && data[1] !== '') {
+        if (data[0].includes('strIngredient') && data[1]) {
           this.ingredients.push(data[1]);
         }
       });
     } else {
+      this.formKeys.length = 0;
       this.callingService
         .getMealDetails(id)
         .subscribe((resData: mealsDetailsInterface) => {
           this.selectedMealDetail = resData.meals[0];
           this.ingredients.length = 0;
+          this.formKeys.length = 0;
           Object.entries(this.selectedMealDetail).map((data: string[]) => {
-            if (data[0].includes('strIngredient') && data[1] !== '') {
+            if (data[0].includes('strIngredient') && data[1]) {
               this.ingredients.push(data[1]);
             }
           });
@@ -167,16 +174,13 @@ export class CategoryMealsComponent implements OnInit {
   editMeal(meal: SingleMealDetailsInterface) {
     this.isEditing = true;
     this.editButtonClicked = true;
-    this.dynamicForm = this.formBuilder.group({});
 
     Object.entries(meal).map((data: string[]) => {
-      if (
-        data[0].includes('strIngredient') &&
-        data[1] !== '' &&
-        data[1] !== undefined &&
-        data[1] !== null
-      ) {
+      if (data[0].includes('strIngredient') && data[1]) {
+        this.dynamicForm.removeControl(data[0]);
         this.dynamicForm.addControl(data[0], new FormControl(data[1]));
+        this.formKeys.push(data[0]);
+        //  console.log(this.formKeys);
       }
     });
   }
@@ -185,21 +189,49 @@ export class CategoryMealsComponent implements OnInit {
     this.isEditing = false;
   }
   cancelMealChanges() {
-    this.isEditing = false;
     this.editButtonClicked = false;
+    this.isEditing = false;
   }
 
-  editSpecificIngredient(test: string, id: string, sastojakId: number) {
-    this.ingredients[sastojakId] = this.dynamicForm.controls[test].value;
-
-    console.log(this.dynamicForm.controls[test].value, id);
-    console.log(test);
-    // Object.entries(this.dynamicForm.value).map((data) => {
-    //   console.log(data);
-    // });
-    // if (+data[0].slice(13) === i + 1) {
-    //   console.log(data[1]);
-    // }
+  editSpecificIngredient(keyInsideForm: string, ingId: number) {
+    if (
+      this.ingredients[ingId] === this.dynamicForm.controls[keyInsideForm].value
+    ) {
+      // this.ingredients[ingId] = this.dynamicForm.controls[keyInsideForm].value;
+    } else {
+      this.ingredients[ingId] = this.dynamicForm.controls[keyInsideForm].value;
+    }
+    // console.log(keyInsideForm, ingId);
+    console.log(this.dynamicForm.controls);
+    console.log(this.ingredients[ingId]);
+    console.log(this.dynamicForm.controls[keyInsideForm].value);
   }
+
+  deleteSpecificIngredient(keyInsideForm: string) {
+    const ingDelete = this.dynamicForm.controls[keyInsideForm].value;
+    this.formKeys.length = 0;
+    this.dynamicForm.removeControl(keyInsideForm);
+    if (this.ingredients.includes(ingDelete)) {
+      this.ingredients.splice(this.ingredients.indexOf(ingDelete), 1, null);
+    }
+    console.log(this.dynamicForm.controls);
+    Object.entries(this.dynamicForm.controls).map((data) => {
+      console.log(data[0]);
+      this.formKeys.push(data[0]);
+      console.log(this.formKeys);
+    });
+    // console.log(this.formKeys);
+  }
+
+  addNewIngredient() {
+    const fieldNumber = Object.keys(this.dynamicForm.controls).length + 1;
+    const newIngridientField = `strIngredient${fieldNumber}`;
+    // console.log(fieldNumber);
+    // console.log(newIngridientField);
+    this.dynamicForm.addControl(newIngridientField, new FormControl(''));
+    // console.log(this.dynamicForm.controls);
+    this.formKeys.push(newIngridientField);
+  }
+
   // EDITING MEAL END
 }

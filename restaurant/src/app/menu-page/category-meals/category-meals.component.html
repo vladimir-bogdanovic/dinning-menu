@@ -103,19 +103,20 @@
           <label for="text">add yout ingredients: </label>
           <div
             class="ingredients-container"
-            *ngFor="let test of dynamicForm.controls | keyvalue; let i = index"
+            *ngFor="let ingredientName of formKeys; let i = index"
           >
-            <label for="{{ test.key }}"> {{ test.key }}</label>
-            <input type="text" [formControlName]="test.key" value= />
-            <button
-              (click)="
-                editSpecificIngredient(test.key, selectedMealDetail.idMeal, i)
-              "
+            <label for="`'strIngredient' + {{ i + 1 }}`"
+              >strIngredient {{ i + 1 }}</label
             >
+            <input type="text" [formControlName]="ingredientName" value= />
+            <button (click)="editSpecificIngredient(ingredientName, i)">
               edit
             </button>
-            <button>delete</button>
+            <button (click)="deleteSpecificIngredient(ingredientName)">
+              delete
+            </button>
           </div>
+          <button (click)="addNewIngredient()">add new ingredient</button>
           <div class="ingredients-container">
             <button class="button" type="button" (click)="saveMealChanges()">
               Save
