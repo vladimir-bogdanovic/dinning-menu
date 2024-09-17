@@ -1,9 +1,6 @@
-<!-- <div  class="test">
-  <p>{{ newMealInfo.mealName || null }}</p>
-</div> -->
-
 <div class="main-wraper">
   <!-- GRID START -->
+
   <div class="grid-wraper">
     <!-- ADD NEW MEAL BUTTON START -->
     <div class="add-new-meal-div">
@@ -30,9 +27,11 @@
         "
       >
         <li (click)="getMealDetails(categoryMeal.idMeal)">
-          <div class="meal-list-name">
-            <span> {{ categoryMeal.strMeal }}</span>
-          </div>
+          <ng-container *ngIf="categoryMeal">
+            <div class="meal-list-name">
+              <span> {{ categoryMeal.strMeal }}</span>
+            </div>
+          </ng-container>
         </li>
       </ul>
       <!-- PAGINATION START -->
@@ -46,51 +45,44 @@
       <!-- PAGINATION END -->
     </div>
   </div>
+
   <!-- GRID END -->
 
   <!-- MEAL DETAILS START -->
   <!-- RANDOM MEALSTART -->
   <div *ngIf="!mealSelected" class="random-meal-div">
-    <div class="meal-name">
-      <span>{{ randomMealName }} - {{ randomMealCategory }}</span>
-    </div>
-    <div class="meal-image">
-      <img src="{{ randomMealThumb }}" alt="" />
-    </div>
+    <ng-container *ngIf="randomMeal">
+      <div class="meal-name">
+        <span>{{ randomMeal.strMeal }} - {{ randomMeal.strCategory }}</span>
+      </div>
+      <div class="meal-image">
+        <img src="{{ randomMeal.strMealThumb }}" alt="" />
+      </div>
+    </ng-container>
     <div class="meal-ingredients">
       <ul>
-        <li>{{ ingredient1 }}</li>
-        <li>{{ ingredient2 }}</li>
-        <li>{{ ingredient3 }}</li>
-        <li>{{ ingredient4 }}</li>
-        <li>{{ ingredient5 }}</li>
-        <li>{{ ingredient6 }}</li>
-        <li>{{ ingredient7 }}</li>
-        <li>{{ ingredient8 }}</li>
-        <li>{{ ingredient9 }}</li>
+        <li *ngFor="let randomSastojci of randomMealIngredients">
+          {{ randomSastojci }}
+        </li>
       </ul>
     </div>
   </div>
   <!-- RANDOM MEAL END -->
   <!-- SELECTED MEAL START -->
   <div *ngIf="mealSelected" class="random-meal-div">
-    <div class="meal-name">
-      <span>{{ selectedMealDetail.strMeal }}</span>
-    </div>
-    <div class="meal-image">
-      <img src="{{ selectedMealDetail.strMealThumb }}" alt="" />
-    </div>
+    <ng-container *ngIf="selectedMealDetail">
+      <div class="meal-name">
+        <span>{{ selectedMealDetail.strMeal }}</span>
+      </div>
+      <div class="meal-image">
+        <img src="{{ selectedMealDetail.strMealThumb }}" alt="" />
+      </div>
+    </ng-container>
     <div class="meal-ingredients">
       <ul>
-        <li>{{ selectedMealDetail.strIngredient1 }}</li>
-        <li>{{ selectedMealDetail.strIngredient2 }}</li>
-        <li>{{ selectedMealDetail.strIngredient3 }}</li>
-        <li>{{ selectedMealDetail.strIngredient4 }}</li>
-        <li>{{ selectedMealDetail.strIngredient5 }}</li>
-        <li>{{ selectedMealDetail.strIngredient6 }}</li>
-        <li>{{ selectedMealDetail.strIngredient7 }}</li>
-        <li>{{ selectedMealDetail.strIngredient8 }}</li>
-        <li>{{ selectedMealDetail.strIngredient9 }}</li>
+        <li *ngFor="let sastojak of ingredients">
+          {{ sastojak }}
+        </li>
       </ul>
     </div>
     <!-- EDIT MEAL START -->
@@ -105,26 +97,27 @@
         </button>
       </div>
       <div *ngIf="isEditing" class="edit-form-div">
-        <!-- EDIT MEAL FORM START -->
-        <form [formGroup]="editMealForm">
-          <h2 class="meal-name">Edit selected recipe</h2>
-          <div class="label-and-input-div">
-            <label for="name">meal name: </label>
-            <input type="text" formControlName="strMeal" />
+        <!-- EDIT MEAL FORM START  -->
+
+        <form [formGroup]="dynamicForm">
+          <label for="text">add yout ingredients: </label>
+          <div
+            class="ingredients-container"
+            *ngFor="let ingredientName of formKeys; let i = index"
+          >
+            <label for="`'strIngredient' + {{ i + 1 }}`"
+              >strIngredient {{ i + 1 }}</label
+            >
+            <input type="text" [formControlName]="ingredientName" value= />
+            <button (click)="editSpecificIngredient(ingredientName, i)">
+              edit
+            </button>
+            <button (click)="deleteSpecificIngredient(ingredientName)">
+              delete
+            </button>
           </div>
-          <div class="label-and-input-div">
-            <label for="text">add yout ingredients: </label>
-            <input type="text" formControlName="strIngredient1" />
-            <input type="text" formControlName="strIngredient2" />
-            <input type="text" formControlName="strIngredient3" />
-            <input type="text" formControlName="strIngredient4" />
-            <input type="text" formControlName="strIngredient5" />
-            <input type="text" formControlName="strIngredient6" />
-            <input type="text" formControlName="strIngredient7" />
-            <input type="text" formControlName="strIngredient8" />
-            <input type="text" formControlName="strIngredient9" />
-          </div>
-          <div class="label-and-input-div">
+          <button (click)="addNewIngredient()">add new ingredient</button>
+          <div class="ingredients-container">
             <button class="button" type="button" (click)="saveMealChanges()">
               Save
             </button>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-welcome-page',
@@ -7,9 +7,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./welcome-page.component.css'],
 })
 export class WelcomePageComponent {
-  constructor(private router: Router) {}
+  constructor(private navService: NavigationService) {}
 
   toMenu() {
-    this.router.navigate(['menu']);
+    this.navService.navigation('menu');
+  }
+
+  goToAboutPage() {
+    this.navService.navigation('about');
   }
 }

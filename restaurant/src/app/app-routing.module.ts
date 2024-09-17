@@ -4,6 +4,8 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { MenuPageComponent } from './menu-page/menu-page.component';
 import { CategoryMealsComponent } from './menu-page/category-meals/category-meals.component';
 import { AddNewMealComponent } from './add-new-meal/add-new-meal.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   {
@@ -11,7 +13,7 @@ const routes: Routes = [
     component: WelcomePageComponent,
   },
   {
-    path: 'welcome',
+    path: 'home',
     component: WelcomePageComponent,
   },
   {
@@ -26,6 +28,15 @@ const routes: Routes = [
     path: 'menu/:food/new-meal',
     component: AddNewMealComponent,
   },
+  {
+    path: 'about',
+    component: AboutComponent,
+  },
+  {
+    path: '*',
+    component: NotFoundComponent,
+  },
+  { path: '**', redirectTo: '*' },
 ];
 
 @NgModule({
